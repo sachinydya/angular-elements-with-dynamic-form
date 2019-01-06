@@ -1,0 +1,152 @@
+<div
+    *ngIf="formField.fieldType; else fieldTypeNotFound"
+    [formGroup]="form"
+    [class]="formField.parentClasses">
+
+    <!-- LABEL -->
+    <label [attr.for]="formField.id" [attr.class]="formField.labelClasses" >{{formField.label}}</label>
+
+    <div [ngSwitch]="formField.fieldType">
+
+        <!-- INPUT FIELD => TEXT/NUMBER/PASSWORD -->
+        <input
+            *ngSwitchCase="'input'"
+            [formControlName]="formField.model"
+            [id]="formField.id"
+            [name]="formField.name"
+            [type]="formField.type"
+            [autocomplete]="formField.autocomplete"
+            [attr.autofocus]="formField.autofocus"
+            [class]="formField.classes"
+            [placeholder]="formField.placeholder"
+            [ngStyle]="formField.styles">
+
+        <!-- DROPDOWN => SINGLE/MULTISELECT -->
+        <select
+            *ngSwitchCase="'dropdown'"
+            [formControlName]="formField.model"
+            [id]="formField.model"
+            [name]="formField.name"
+            [ngStyle]="formField.styles"
+            [attr.multiple]="formField.multiple"
+            [attr.autofocus]="formField.autofocus"
+            [class]="formField.classes">
+            <option value="" selected disabled>{{formField.placeholder}}</option>
+            <option *ngFor="let opt of formField.option" [value]="opt.value">{{opt.label}}</option>
+        </select>
+
+        <!-- TEXTAREA -->
+        <textarea
+            *ngSwitchCase="'textarea'"
+            [formControlName]="formField.model"
+            [name]="formField.name"
+            [id]="formField.id"
+            [attr.autofocus]="formField.autofocus"
+            [attr.autocomplete]="formField.autocomplete"
+            [ngStyle]="formField.styles"
+            [class]="formField.classes"
+            [placeholder]="formField.placeholder"
+            [cols]="formField.cols"
+            [rows]="formField.rows">
+        </textarea>
+        <!-- <pre>{{formField | json }}</pre> -->
+        <!-- <pre>{{formField.group | json }}</pre> -->
+        <!-- {{formField.autocomplete}} -->
+
+        <!-- CHECKBOX-->
+        <div
+            [formArrayName]="formField.model"
+            *ngSwitchCase="'checkbox'">
+            <div *ngIf="formField.group.length; else noDataFound">
+                <div
+                    *ngFor="let single of form.controls[formField.model].controls; let i = index;"
+                    [class]="formField.containerClasses">
+                    <input
+                        [name]="formField.name"
+                        [class]="formField.classes"
+                        type="checkbox"
+                        [formControlName]="i"
+                        [id]="formField.group[i].id"
+                        [attr.autofocus]="formField.group[i].autofocus"
+                        [value]="formField.group[i].value">
+                    <label
+                        [attr.class]="formField.containerLabelClasses"
+                        [attr.for]="formField.group[i].id">
+                        {{ formField.group[i].label }}
+                    </label>
+                </div>
+            </div>
+            <ng-template #noDataFound>
+                <div class="alert alert-danger" role="alert">
+                    <strong>
+                        Cannot render field! No data found!.
+                    </strong>
+                </div>
+            </ng-template>
+        </div>
+
+        <!-- RADIO BUTTON -->
+        <div
+            *ngSwitchCase="'radio'">
+            <div *ngIf="formField.group.length; else noRadioOptionsDataFound">
+                <div
+                    *ngFor="let single of formField.group"
+                    [class]="formField.containerClasses">
+                    <input
+                        [class]="formField.classes"
+                        type="radio
+                        [name]="formField.name"
+                        [formControlName]="formField.model"
+                        [id]="single.id"
+                        [attr.autofocus]="single.autofocus"
+                        [value]="single.value">
+                    <label
+                        [attr.class]="formField.containerLabelClasses"
+                        [attr.for]="single.id">
+                        {{ single.label }}
+                    </label>
+                </div>
+            </div>
+            <ng-template #noRadioOptionsDataFound>
+                <div class="alert alert-danger" role="alert">
+                    <strong>
+                        Cannot render field! No data found!.
+                    </strong>
+                </div>
+            </ng-template>
+        </div>
+
+    </div>
+
+    <div class="errorMessage text-danger ml-1 mt-1" *ngIf="!isValid && (form.controls[formField.model].touched || form.controls[formField.model].value)">
+        <div *ngIf="form.controls[formField.model].errors.required" class="text-danger">
+            {{formField.label}} is a required field.
+        </div>
+        <div *ngIf="form.controls[formField.model].errors.pattern" class="text-danger">
+            {{formField.regexMessage}}
+        </div>
+        <div *ngIf="form.controls[formField.model].errors.email" class="text-danger">
+            Please enter valid email ID.
+        </div>
+        <div *ngIf="form.controls[formField.model].errors.min" class="text-danger">
+            {{formField.label}} cannot be lesser than {{formField.min}}.
+        </div>
+        <div *ngIf="form.controls[formField.model].errors.max" class="text-danger">
+            {{formField.label}} cannot be greater than {{formField.max}}.
+        </div>
+        <div *ngIf="form.controls[formField.model].errors.minlength" class="text-danger">
+            {{formField.label}} cannot be less than {{formField.minLength}} characters.
+        </div>
+        <div *ngIf="form.controls[formField.model].errors.maxlength" class="text-danger">
+            {{formField.label}} cannot exceed {{formField.maxLength}} characters.
+        </div>
+    </div>
+</div>
+
+<ng-template #fieldTypeNotFound>
+    <div class="alert alert-danger" role="alert">
+        <strong class="text-capitalize">
+            Cannot render field! Please provide a valid 'fieldType'.
+        </strong>
+    </div>
+</ng-template>
