@@ -63,7 +63,7 @@ export class FormFieldConfigurationService {
 
             if (formField.required) { validator.push(Validators.required); }
 
-            if(formField.fieldType !== 'checkbox') {
+            if (formField.fieldType !== 'checkbox') {
                 group[formField.model] = [formField.value || '', validator];
             } else {
                 const formControlArray = [], checkboxGroup = formField.group;
@@ -82,8 +82,6 @@ export class FormFieldConfigurationService {
     }
 
     get getChechbox () {
-        console.log(this.form);
-
         return this.form;
     }
 

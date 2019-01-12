@@ -11,14 +11,7 @@ import { FormField } from '../../models/form-field-base';
 export class DynamicFormFieldComponent {
 
     @Input() formField: FormField<any>;
+
     @Input() form: FormGroup;
-
-    get isValid () {
-        // console.log(this.formField.model, '= ', this.form.controls[this.formField.model].touched);
-        // console.log(this.formField.model, '= ', this.form.controls[this.formField.model].errors);
-        // console.log(this.form);
-
-        return this.form.controls[this.formField.model].valid;
-    }
 
 }

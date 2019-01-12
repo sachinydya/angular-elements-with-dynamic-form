@@ -118,7 +118,7 @@
 
     </div>
 
-    <div class="errorMessage text-danger ml-1 mt-1" *ngIf="!isValid && (form.controls[formField.model].touched || form.controls[formField.model].value)">
+    <div class="errorMessage text-danger ml-1 mt-1" *ngIf="!form.controls[formField.model].valid && (form.controls[formField.model].touched || form.controls[formField.model].value)">
         <div *ngIf="form.controls[formField.model].errors.required" class="text-danger">
             {{formField.label}} is a required field.
         </div>
