@@ -1,8 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgModule } from '@angular/core';
+import {
+    NgModule,
+    Injector,
+} from '@angular/core';
+
+import { createCustomElement } from '@angular/elements';
 
 import { AppComponent } from './app.component';
+
 import { DynamicFormComponent } from './dynamic-form/dynamic-form.component';
 import { DynamicFormFieldComponent } from './dynamic-form/dynamic-form-field/dynamic-form-field.component';
 
@@ -16,9 +22,17 @@ import { DynamicFormFieldComponent } from './dynamic-form/dynamic-form-field/dyn
         DynamicFormComponent,
         DynamicFormFieldComponent
     ],
-    bootstrap: [AppComponent]
+    // bootstrap: [AppComponent],
+    entryComponents: [AppComponent]
 })
 
 export class AppModule {
-    constructor() { }
+    constructor(private injector: Injector) {
+        customElements.define(
+            'dynamic-form-web-element',
+            createCustomElement(AppComponent, { injector })
+        );
+    }
+
+    ngDoBootstrap () { }
 }

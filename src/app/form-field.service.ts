@@ -18,12 +18,12 @@ export class FormFieldService {
                     break;
 
                 case 'dropdown':
-                    field.option.sort((a, b) => a.order - b.order); // SORT OPTION BY ORDER
+                    field.option.sort((a: any, b: any) => a.order - b.order); // SORT OPTION BY ORDER
                     this.formFields.push(new FormFieldDropdown(field));
                     break;
 
                 case 'radio':
-                    field.group.sort((a, b) => a.order - b.order); // SORT RADIO OPTIONS BY ORDER
+                    field.group.sort((a: any, b: any) => a.order - b.order); // SORT RADIO OPTIONS BY ORDER
                     this.formFields.push(new FormFieldRadio(field));
                     break;
 
